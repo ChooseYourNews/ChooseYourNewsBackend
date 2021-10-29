@@ -1,0 +1,18 @@
+create table users (
+    id serial primary key,
+    email varchar(50) not null unique,
+    password varchar(50) not null,
+    first_name varchar(50) not null,
+    last_name varchar(50) not null
+);
+
+
+create table interests (
+    id serial primary key,
+    interest_name varchar(50) not null
+);
+
+create table UserInterest (
+    user_id int references users(id),
+    interest_id int references interests(id)
+);
