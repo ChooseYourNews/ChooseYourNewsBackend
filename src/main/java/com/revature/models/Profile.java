@@ -1,23 +1,27 @@
 package com.revature.models;
 
+import org.hibernate.Session;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 @Component
 @Entity
 public class Profile {
-    private String name;
-    List<String> interestList;
+    private User user;
+    @ElementCollection
+    private List<Interest> interestList;
 
     Profile() {
         super();
     }
 
-    Profile(String name, List<String> interestList) {
+    public Profile(User user, List<Interest> interestList) {
         super();
-        this.name = name;
+        this.user = user;
         this.interestList = interestList;
     }
 }

@@ -7,29 +7,29 @@ import javax.persistence.*;
 
 @Component
 @Entity
-@Table(name = "interest", schema = "public")
+@Table(name = "interests", schema = "public")
 public class Interest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "interest")
-    private String interest;
+    @Column(name = "interest_name")
+    private String interestName;
 
     public Interest(){
         super();
     }
 
-    public Interest(String interest) {
+    public Interest(String interestName) {
         super();
-        this.interest = interest;
+        this.interestName = interestName;
     }
 
-    public Interest(int id, String interest) {
+    public Interest(int id, String interestName) {
         super();
         this.id = id;
-        this.interest = interest;
+        this.interestName = interestName;
     }
 
     public void setId(int id) {
@@ -37,14 +37,14 @@ public class Interest {
     }
 
     public String getInterest() {
-        return interest;
+        return interestName;
     }
 
     @Override
     public String toString() {
         return "Interest{" +
                 "id=" + id +
-                ", interest='" + interest +
+                ", interest='" + interestName +
                 '}';
     }
 }
