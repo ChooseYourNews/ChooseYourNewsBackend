@@ -1,6 +1,8 @@
 package com.revature.util;
 
 import com.revature.models.Interest;
+import com.revature.models.Profile;
+import com.revature.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -17,9 +19,9 @@ public class HibernateUtil {
 
             Properties settings = new Properties();
             settings.put(Environment.DRIVER, "org.postgresql.Driver");
-            settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/postgres");
-            settings.put(Environment.USER, "postgres");
-            settings.put(Environment.PASS, "p4ssw0rd");
+            settings.put(Environment.URL, System.getenv("ChooseYourNewsDB_URL"));
+            settings.put(Environment.USER, System.getenv("ChooseYourNewsDB_User"));
+            settings.put(Environment.PASS, System.getenv("ChooseYourNewsDB_Password"));
             settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
             settings.put(Environment.SHOW_SQL, "true");
@@ -29,7 +31,8 @@ public class HibernateUtil {
             sessionFactory =  new Configuration()
                     .setProperties(settings)
                     .addAnnotatedClass(Interest.class)
-//                    .addAnnotatedClass(Breed.class)
+                    .addAnnotatedClass(Profile.class)
+                    .addAnnotatedClass(User.class)
                     .buildSessionFactory();
         }
         return  sessionFactory;
