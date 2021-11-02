@@ -36,7 +36,7 @@ public class Interest {
         this.id = id;
     }
 
-    public String getInterest() {
+    public String getInterestName() {
         return interestName;
     }
 
@@ -44,7 +44,7 @@ public class Interest {
     public String toString() {
         return "Interest{" +
                 "id=" + id +
-                ", interest='" + interestName +
+                ", interestName='" + interestName +
                 '}';
     }
 }

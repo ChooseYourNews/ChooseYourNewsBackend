@@ -24,7 +24,7 @@ public class AuthAspect {
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String authToken = request.getHeader("Authorization");
         if(authToken == null){
-            // prevent addNewBreed method from executing
+            // prevent addInterest method from executing
             logger.warn("no token received from request");
             // return 401 to the client
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

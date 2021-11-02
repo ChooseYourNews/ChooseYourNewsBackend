@@ -17,10 +17,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Interest addInterest(Interest interest) {
-        return interestDao.addInterest(interest.getInterest());
+        return interestDao.addInterest(interest.getInterestName());
     }
 
     public Profile getProfile() {
         return userDao.getProfile();
     }
+
+    public Interest deleteInterest(Interest interest) { return interestDao.deleteInterest(interest);}
 }

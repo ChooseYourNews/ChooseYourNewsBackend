@@ -20,4 +20,9 @@ public class InterestController {
         return new ResponseEntity<>(userService.addInterest(interest), HttpStatus.CREATED);
     }
 
+    @DeleteMapping
+    public ResponseEntity<Interest> deleteInterest(@RequestBody Interest interest){
+        return new ResponseEntity<>(userService.deleteInterest(interest), HttpStatus.CREATED);
+    }
+
 }

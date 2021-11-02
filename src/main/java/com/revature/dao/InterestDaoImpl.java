@@ -22,4 +22,14 @@ public class InterestDaoImpl implements InterestDao {
             return new Interest(id, interest);
         }
     }
+
+    @Override
+    public Interest deleteInterest(Interest interest) {
+        try(Session sess = sf.openSession()) {
+            Transaction tx = sess.beginTransaction();
+            tx.commit();
+            sess.delete(interest);
+            return interest;
+        }
+    }
 }
