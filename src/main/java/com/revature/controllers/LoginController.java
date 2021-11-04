@@ -32,9 +32,8 @@ public class LoginController {
             // return 401 to the client
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + authToken);
-            return new ResponseEntity<>(null, headers, HttpStatus.CREATED);
+            logger.info("token created");
+            return new ResponseEntity<>(authToken, HttpStatus.CREATED);
         }
     }
 }

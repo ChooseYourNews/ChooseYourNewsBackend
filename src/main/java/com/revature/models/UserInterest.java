@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 //@Component
@@ -17,12 +18,12 @@ public class UserInterest implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     User user;
 
     @Id
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "interest_id")
     Interest interest;
 
 //    @ManyToMany
@@ -33,4 +34,18 @@ public class UserInterest implements Serializable {
 //    )
 //    @WhereJoinTable( clause = "created_on > DATEADD( 'DAY', -7, CURRENT_TIMESTAMP() )")
 //    private List<Reader> currentWeekReaders = new ArrayList<>( );
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserInterest that = (UserInterest) o;
+        return Objects.equals(user, that.user) && Objects.equals(interest, that.interest);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, interest);
+    }
 }

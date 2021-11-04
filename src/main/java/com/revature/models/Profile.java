@@ -11,8 +11,9 @@ import java.util.List;
 @Component
 @Entity
 public class Profile {
+    @Id
     private User user;
-//    @ElementCollection
+    @ElementCollection
     private List<Interest> interestList;
 
     Profile() {

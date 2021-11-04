@@ -21,19 +21,17 @@ public class RegisterController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Object> authenticate(@RequestParam("email") String email, @RequestParam("password") String password) throws NoSuchAlgorithmException, InvalidKeyException {
-
+    public ResponseEntity<String> register(@RequestParam("email") String email, @RequestParam("password") String password) throws NoSuchAlgorithmException, InvalidKeyException {
         String authToken = userService.register(email, password);
-
+        System.out.println(authToken);
         if (authToken == null) {
             // prevent methods from executing
             logger.warn("account not created from request");
             // return 401 to the client
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + authToken);
-            return new ResponseEntity<>(null, headers, HttpStatus.CREATED);
+            logger.info("token created");
+            return new ResponseEntity<>(authToken, HttpStatus.CREATED);
         }
     }
 }

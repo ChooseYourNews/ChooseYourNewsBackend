@@ -19,6 +19,7 @@ public class User {
     @Email
     @Column(name = "email")
     private String email;
+    
     @Column(name = "password")
     public String password;
 
@@ -30,7 +31,12 @@ public class User {
         this.id = id;
     }
 
+    public User() {
+        super();
+    }
+
     public User(String email, String password) {
+        super();
         this.email = email;
         this.password = password;
     }

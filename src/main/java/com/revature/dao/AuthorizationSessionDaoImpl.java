@@ -40,10 +40,10 @@ public class AuthorizationSessionDaoImpl implements AuthorizationSessionDao {
                 SecretKey tokenKey = kg.generateKey();
                 String token = base64Encoder.encodeToString(tokenKey.getEncoded());
 
-                AuthorizationSession authorizationSession = new AuthorizationSession(token);
+                AuthorizationSession authorizationSession = new AuthorizationSession(token, user);
 
                 Transaction tx = sess.beginTransaction();
-                int id = (int)sess.save(authorizationSession);
+                sess.save(authorizationSession);
                 System.out.println("Inserted Authorization Session: " + authorizationSession);
                 tx.commit();
                 sess.close();
@@ -96,20 +96,23 @@ public class AuthorizationSessionDaoImpl implements AuthorizationSessionDao {
         SecretKey tokenKey = kg.generateKey();
         String token = base64Encoder.encodeToString(tokenKey.getEncoded());
 
-        AuthorizationSession authorizationSession = new AuthorizationSession(token);
+        AuthorizationSession authorizationSession = new AuthorizationSession(token, user);
 
+        System.out.println(authorizationSession);
+        System.out.println(authorizationSession.user);
+        System.out.println(authorizationSession.token);
+        System.out.println(authorizationSession.getJwt());
         try (Session sess = sf.openSession()) {
             Transaction tx = sess.beginTransaction();
             int userId = (int) sess.save(user);
             System.out.println("Inserted User: " + user);
-            int authorizationSessionId = (int)sess.save(authorizationSession);
+            sess.save(authorizationSession);
             System.out.println("Inserted Authorization Session: " + authorizationSession);
             tx.commit();
-            sess.close();
-
-            return authorizationSession.getJwt();
+        } catch (Exception throwable) {
+            throwable.printStackTrace();
         } finally {
-            return null;
+            return authorizationSession.getJwt();
         }
     }
 }

@@ -12,7 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
 //@Component
 @Entity
@@ -27,11 +29,12 @@ public class AuthorizationSession implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     public User user;
 
-    public AuthorizationSession(String token) throws NoSuchAlgorithmException {
+    public AuthorizationSession(String token, User user) throws NoSuchAlgorithmException {
         this.token = token;
+        this.user = user;
 
         // Generate secret key for HmacSHA256
         KeyGenerator kg = KeyGenerator.getInstance("HmacSHA256");
@@ -51,5 +54,20 @@ public class AuthorizationSession implements Serializable {
         String JWTVerifySignature = base64Encoder.encodeToString(result);
 
         return JWTHeader + "." + JWTPayload + "." + JWTVerifySignature;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthorizationSession that = (AuthorizationSession) o;
+        return Arrays.equals(secret, that.secret) && Objects.equals(token, that.token) && Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(token, user);
+        result = 31 * result + Arrays.hashCode(secret);
+        return result;
     }
 }
