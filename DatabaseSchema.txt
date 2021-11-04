@@ -1,7 +1,7 @@
 create table users (
     id serial primary key,
     email varchar(50) not null unique,
-    password varchar(50) not null,
+    password text not null,
     first_name varchar(50) not null,
     last_name varchar(50) not null
 );
@@ -15,4 +15,10 @@ create table interests (
 create table UserInterest (
     user_id int references users(id),
     interest_id int references interests(id)
+);
+
+create table AuthorizationSession (
+    token text primary key not null,
+    user_id int not null references users(id),
+    secret bytea not null
 );

@@ -8,15 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/login")
-public class LoginController {
-    private Logger logger = Logger.getLogger(LoginController.class);
+@RequestMapping("/register")
+public class RegisterController {
+    private Logger logger = Logger.getLogger(RegisterController.class);
 
     @Autowired
     private UserService userService;
@@ -24,11 +23,11 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<Object> authenticate(@RequestParam("email") String email, @RequestParam("password") String password) throws NoSuchAlgorithmException, InvalidKeyException {
 
-        String authToken = userService.login(email, (CharSequence)password);
+        String authToken = userService.register(email, password);
 
-        if(authToken == null) {
+        if (authToken == null) {
             // prevent methods from executing
-            logger.warn("no token received from request");
+            logger.warn("account not created from request");
             // return 401 to the client
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {

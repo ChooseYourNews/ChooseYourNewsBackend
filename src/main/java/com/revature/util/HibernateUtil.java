@@ -1,8 +1,6 @@
 package com.revature.util;
 
-import com.revature.models.Interest;
-import com.revature.models.Profile;
-import com.revature.models.User;
+import com.revature.models.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -19,23 +17,24 @@ public class HibernateUtil {
 
             Properties settings = new Properties();
             settings.put(Environment.DRIVER, "org.postgresql.Driver");
-            settings.put(Environment.URL, System.getenv("ChooseYourNewsDB_URL"));
-            settings.put(Environment.USER, System.getenv("ChooseYourNewsDB_User"));
-            settings.put(Environment.PASS, System.getenv("ChooseYourNewsDB_Password"));
+            settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/postgres");
+            settings.put(Environment.USER, "postgres");
+            settings.put(Environment.PASS, "password");
             settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
             settings.put(Environment.SHOW_SQL, "true");
             settings.put(Environment.HBM2DDL_AUTO, "validate");
             // create, update, create-drop, validate
 
-            sessionFactory =  new Configuration()
+            sessionFactory = new Configuration()
                     .setProperties(settings)
                     .addAnnotatedClass(Interest.class)
-                    .addAnnotatedClass(Profile.class)
+                    .addAnnotatedClass(UserInterest.class)
+                    .addAnnotatedClass(AuthorizationSession.class)
                     .addAnnotatedClass(User.class)
                     .buildSessionFactory();
         }
-        return  sessionFactory;
+        return sessionFactory;
     }
 
     public static Session getSession(){

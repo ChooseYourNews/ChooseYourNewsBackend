@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class Profile {
     private User user;
-    @ElementCollection
+//    @ElementCollection
     private List<Interest> interestList;
 
     Profile() {

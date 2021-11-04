@@ -5,10 +5,14 @@ import com.revature.models.Interest;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
+import static com.revature.util.HibernateUtil.getSessionFactory;
+
+@Repository
 public class InterestDaoImpl implements InterestDao {
 
-    private static SessionFactory sf = HibernateUtil.getSessionFactory();
+    private static SessionFactory sf = getSessionFactory();
 
     @Override
     public Interest addInterest(String interest) {

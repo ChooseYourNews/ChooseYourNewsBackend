@@ -1,13 +1,25 @@
 package com.revature.models;
 
-import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
+
 @Component
 @Entity
 @Table(name = "interests", schema = "public")
+//@SecondaryTable(name = "UserInterests",
+//        pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
+//@org.hibernate.annotations.Table(
+//        appliesTo = "UserInterests",
+//        sqlInsert = @SQLInsert(
+//                sql = "INSERT INTO person_details (image, person_id, valid) VALUES (?, ?, true) ",
+//                check = ResultCheckStyle.COUNT
+//        ),
+//        sqlDelete = @SQLDelete(
+//                sql = "UPDATE person_details SET valid = false WHERE person_id = ? "
+//        )
+//)
 public class Interest {
 
     @Id
