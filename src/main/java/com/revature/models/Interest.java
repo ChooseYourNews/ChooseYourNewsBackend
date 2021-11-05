@@ -25,9 +25,9 @@ public class Interest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    public int id;
     @Column(name = "interest_name")
-    private String interestName;
+    public String interestName;
 
     public Interest(){
         super();

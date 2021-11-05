@@ -7,16 +7,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
-//@Component
+@Component
 @Entity
 @Table(name = "UserInterest", schema = "public")
 public class UserInterest implements Serializable {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    int id;
-
-    @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
@@ -26,6 +21,15 @@ public class UserInterest implements Serializable {
     @JoinColumn(name = "interest_id")
     Interest interest;
 
+    public UserInterest() {
+        super();
+    }
+
+    public UserInterest(User user, Interest interest) {
+        super();
+        this.user = user;
+        this.interest = interest;
+    }
 //    @ManyToMany
 //    @JoinTable(
 //            name = "Book_Reader",
@@ -47,5 +51,13 @@ public class UserInterest implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(user, interest);
+    }
+
+    @Override
+    public String toString() {
+        return "UserInterest{" +
+                "user=" + user +
+                ", interest=" + interest +
+                '}';
     }
 }

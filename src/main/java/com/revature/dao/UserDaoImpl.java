@@ -25,10 +25,7 @@ public class UserDaoImpl implements UserDao {
     private static SessionFactory sf = getSessionFactory();
 
     @Override
-    public Profile getProfile() {
-
-        // Todo: Use actual userId
-        String userId = null;
+    public Profile getProfile(int userId) {
 
         Session sess = sf.openSession();
 
@@ -37,13 +34,21 @@ public class UserDaoImpl implements UserDao {
 //                .list();
 
 
-        String hql = "SELECT b.id, b.interestName FROM UserInterest AS a JOIN a.interest AS b WHERE a.user.id = :userId";
+        String interestListHql = "SELECT a.interest FROM UserInterest AS a JOIN a.interest AS b WHERE a.user.id = :userId";
 
-        Query query = sess.createQuery(hql);
+        Query interestListQuery = sess.createQuery(interestListHql);
 
-        query.setParameter("userId", userId);
+        interestListQuery.setParameter("userId", userId);
 
-        List<Interest> interestList = query.list();
+        List<Interest> interestList = interestListQuery.list();
+
+        String userHql = "from User as u where u.id = :userId";
+
+        Query userQuery = sess.createQuery(userHql);
+
+        userQuery.setParameter("userId", userId);
+
+        User user = (User)userQuery.getSingleResult();
 
 //        CriteriaBuilder interestListCriteriaBuilder = sess.getCriteriaBuilder();
 //        CriteriaQuery<Interest> interestListCriteriaQuery = interestListCriteriaBuilder.createQuery(Interest.class);
@@ -55,9 +60,7 @@ public class UserDaoImpl implements UserDao {
 //        Query<Interest> interestListQuery = sess.createQuery(interestListCriteriaQuery);
 //        List<Interest> interestList = interestListQuery.list();
 
-        User user = sess.get(User.class, userId);
-
-        return new Profile(user, interestList);
+        return new Profile(new UserInfo(user.firstName, user.lastName), interestList);
     }
 }
 

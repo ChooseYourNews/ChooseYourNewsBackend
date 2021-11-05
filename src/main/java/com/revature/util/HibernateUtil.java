@@ -17,9 +17,9 @@ public class HibernateUtil {
 
             Properties settings = new Properties();
             settings.put(Environment.DRIVER, "org.postgresql.Driver");
-            settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/postgres");
-            settings.put(Environment.USER, "postgres");
-            settings.put(Environment.PASS, "password");
+            settings.put(Environment.URL, System.getenv("ChooseYourNewsDB_URL"));
+            settings.put(Environment.USER, System.getenv("ChooseYourNewsDB_User"));
+            settings.put(Environment.PASS, System.getenv("ChooseYourNewsDB_Password"));
             settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
             settings.put(Environment.SHOW_SQL, "true");
@@ -32,6 +32,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(UserInterest.class)
                     .addAnnotatedClass(AuthorizationSession.class)
                     .addAnnotatedClass(User.class)
+//                    .addAnnotatedClass(Profile.class)
                     .buildSessionFactory();
         }
         return sessionFactory;

@@ -21,17 +21,17 @@ public class UserServiceImpl implements UserService {
     public AuthorizationSessionDao authorizationSessionDao = new AuthorizationSessionDaoImpl();
 
     @Override
-    public Interest addInterest(Interest interest) {
-        return interestDao.addInterest(interest.getInterestName());
+    public Interest addInterest(Interest interest, int userId) {
+        return interestDao.addInterest(interest.getInterestName(), userId);
     }
 
     @Override
-    public Profile getProfile() {
-        return userDao.getProfile();
+    public Profile getProfile(int userId) {
+        return userDao.getProfile(userId);
     }
 
     @Override
-    public Interest deleteInterest(Interest interest) { return interestDao.deleteInterest(interest);}
+    public Interest deleteInterest(Interest interest, int userId) { return interestDao.deleteInterest(interest, userId);}
 
     @Override
     public String login(String email, CharSequence password) throws NoSuchAlgorithmException, InvalidKeyException { return authorizationSessionDao.login(email, password); }
@@ -40,6 +40,8 @@ public class UserServiceImpl implements UserService {
     public boolean checkAuthorization(String token) throws IOException, NoSuchAlgorithmException, InvalidKeyException { return authorizationSessionDao.checkAuthorization(token);}
 
     @Override
-    public String register(String email, CharSequence password) throws NoSuchAlgorithmException, InvalidKeyException { return authorizationSessionDao.register(email, password); }
+    public String register(String email, CharSequence password, String firstName, String lastName) throws NoSuchAlgorithmException, InvalidKeyException { return authorizationSessionDao.register(email, password, firstName, lastName); }
 
+    @Override
+    public int getUserId(String token) throws IOException { return authorizationSessionDao.getUserId(token);}
 }

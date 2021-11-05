@@ -32,6 +32,10 @@ public class AuthorizationSession implements Serializable {
     @JoinColumn(name = "user_id")
     public User user;
 
+    public AuthorizationSession() {
+        super();
+    }
+
     public AuthorizationSession(String token, User user) throws NoSuchAlgorithmException {
         this.token = token;
         this.user = user;

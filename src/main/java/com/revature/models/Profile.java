@@ -9,18 +9,16 @@ import javax.persistence.*;
 import java.util.List;
 
 @Component
-@Entity
 public class Profile {
-    @Id
-    private User user;
+    public UserInfo user;
     @ElementCollection
-    private List<Interest> interestList;
+    public List<Interest> interestList;
 
     Profile() {
         super();
     }
 
-    public Profile(User user, List<Interest> interestList) {
+    public Profile(UserInfo user, List<Interest> interestList) {
         super();
         this.user = user;
         this.interestList = interestList;

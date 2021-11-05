@@ -86,11 +86,11 @@ public class AuthorizationSessionDaoImpl implements AuthorizationSessionDao {
     }
 
     @Override
-    public String register(String email, CharSequence password) throws NoSuchAlgorithmException, InvalidKeyException {
+    public String register(String email, CharSequence password, String firstName, String lastName) throws NoSuchAlgorithmException, InvalidKeyException {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         Base64.Encoder base64Encoder = Base64.getUrlEncoder();
         String bcrypt = bCryptPasswordEncoder.encode(password);
-        User user = new User(email, bcrypt);
+        User user = new User(email, bcrypt, firstName, lastName);
 
         KeyGenerator kg = KeyGenerator.getInstance("HmacSHA256");
         SecretKey tokenKey = kg.generateKey();
@@ -98,10 +98,6 @@ public class AuthorizationSessionDaoImpl implements AuthorizationSessionDao {
 
         AuthorizationSession authorizationSession = new AuthorizationSession(token, user);
 
-        System.out.println(authorizationSession);
-        System.out.println(authorizationSession.user);
-        System.out.println(authorizationSession.token);
-        System.out.println(authorizationSession.getJwt());
         try (Session sess = sf.openSession()) {
             Transaction tx = sess.beginTransaction();
             int userId = (int) sess.save(user);
@@ -114,5 +110,30 @@ public class AuthorizationSessionDaoImpl implements AuthorizationSessionDao {
         } finally {
             return authorizationSession.getJwt();
         }
+    }
+
+    @Override
+    public int getUserId(String token) throws IOException {
+        Base64.Decoder base64Decoder = Base64.getUrlDecoder();
+        Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+
+        String[] split = token.split("\\.");
+        String headerBase64 = split[0];
+        byte[] header = base64Decoder.decode(headerBase64);
+        String payloadBase64 = split[1];
+        byte[] payload = base64Decoder.decode(payloadBase64);
+        String verifySignatureBase64 = split[2];
+        ObjectMapper om = new ObjectMapper();
+        AuthorizationJWTHeader authorizationJWTHeader = om.readValue(header, AuthorizationJWTHeader.class);
+        AuthorizationJWTPayload authorizationJWTPayload = om.readValue(payload, AuthorizationJWTPayload.class);
+        Session sess = sf.openSession();
+
+        String hql = "select u.id from AuthorizationSession as a join a.user as u where a.token = :token";
+
+        Query query = sess.createQuery(hql);
+
+        query.setParameter("token", authorizationJWTPayload.token);
+
+        return (int)query.getSingleResult();
     }
 }

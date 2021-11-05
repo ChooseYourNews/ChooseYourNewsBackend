@@ -21,8 +21,8 @@ public class RegisterController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<String> register(@RequestParam("email") String email, @RequestParam("password") String password) throws NoSuchAlgorithmException, InvalidKeyException {
-        String authToken = userService.register(email, password);
+    public ResponseEntity<String> register(@RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) throws NoSuchAlgorithmException, InvalidKeyException {
+        String authToken = userService.register(email, password, firstName, lastName);
         System.out.println(authToken);
         if (authToken == null) {
             // prevent methods from executing

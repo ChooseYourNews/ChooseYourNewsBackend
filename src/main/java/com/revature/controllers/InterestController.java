@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -16,13 +21,23 @@ public class InterestController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Interest> addInterest(@RequestBody Interest interest){
-        return new ResponseEntity<>(userService.addInterest(interest), HttpStatus.CREATED);
+    public ResponseEntity<Interest> addInterest(@RequestBody Interest interest) throws IOException {
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String authTokenHeader = request.getHeader("Authorization");
+        String authToken = authTokenHeader.split(" ")[1];
+        int userId = userService.getUserId(authToken);
+        return new ResponseEntity<>(userService.addInterest(interest, userId), HttpStatus.CREATED);
     }
 
     @DeleteMapping
-    public ResponseEntity<Interest> deleteInterest(@RequestBody Interest interest){
-        return new ResponseEntity<>(userService.deleteInterest(interest), HttpStatus.CREATED);
+    public ResponseEntity<Interest> deleteInterest(@RequestBody Interest interest) throws IOException {
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String authTokenHeader = request.getHeader("Authorization");
+        String authToken = authTokenHeader.split(" ")[1];
+        int userId = userService.getUserId(authToken);
+        return new ResponseEntity<>(userService.deleteInterest(interest, userId), HttpStatus.CREATED);
     }
 
 }
