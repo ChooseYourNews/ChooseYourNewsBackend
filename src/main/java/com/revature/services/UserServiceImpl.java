@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,4 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int getUserId(String token) throws IOException { return authorizationSessionDao.getUserId(token);}
+
+    @Override
+    public List<Interest> getInterests(int userId) { return interestDao.getInterests(userId);}
 }

@@ -7,7 +7,10 @@ import com.revature.models.Interest;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import static com.revature.util.HibernateUtil.getSessionFactory;
 
@@ -43,6 +46,22 @@ public class InterestDaoImpl implements InterestDao {
             System.out.println("Deleted Interest: " + interest);
             tx.commit();
             return interest;
+        }
+    }
+
+    @Override
+    public List<Interest> getInterests(int userId) {
+        try(Session sess = sf.openSession()) {
+
+            String interestListHql = "SELECT a.interest FROM UserInterest AS a JOIN a.interest AS b WHERE a.user.id = :userId";
+
+            Query interestListQuery = sess.createQuery(interestListHql);
+
+            interestListQuery.setParameter("userId", userId);
+
+            List<Interest> interestList = interestListQuery.list();
+
+            return interestList;
         }
     }
 }

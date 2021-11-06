@@ -6,6 +6,7 @@ import com.revature.models.Profile;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public interface UserService {
     public Interest addInterest(Interest interest, int userId);
@@ -15,4 +16,5 @@ public interface UserService {
     public boolean checkAuthorization(String token) throws IOException, NoSuchAlgorithmException, InvalidKeyException;
     public String register(String email, CharSequence password, String firstName, String lastName) throws NoSuchAlgorithmException, InvalidKeyException;
     public int getUserId(String token) throws IOException;
+    public List<Interest> getInterests(int userId);
 }
