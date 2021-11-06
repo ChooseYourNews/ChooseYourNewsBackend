@@ -15,8 +15,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
-//@Aspect
-//@Component
+@Aspect
+@Component
 public class AuthAspect {
 
     private Logger logger = Logger.getLogger(AuthAspect.class);
@@ -24,22 +24,31 @@ public class AuthAspect {
     @Autowired
     private UserService userService;
 
-    @Around("execution(* get*(..)) || execution(* set*(..)) || execution(* delete*(..))")
+    @Around("within(com.revature.controllers.*) && (execution(* get*(..)) || execution(* add*(..)) || execution(* delete*(..)))")
     public ResponseEntity<?> authorizeRequest(ProceedingJoinPoint pjp) throws Throwable {
-        HttpServletRequest request =
-                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String authTokenHeader = request.getHeader("Authorization");
-        String[] split = authTokenHeader.split(" ");
-        if(split.length == 2 && split[0] == "Bearer") {
-            String authToken = split[1];
-            if(userService.checkAuthorization(authToken)) {
-                // allow methods execute normally
-                logger.info("token received");
-                return (ResponseEntity<?>) pjp.proceed();
+        try {
+            HttpServletRequest request =
+                    ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+            String authTokenHeader = request.getHeader("Authorization");
+            if (authTokenHeader != null) {
+                String[] split = authTokenHeader.split(" ");
+                if (split.length == 2 && split[0].equals("Bearer")) {
+                    String authToken = split[1];
+                    if (userService.checkAuthorization(authToken)) {
+                        // allow methods execute normally
+                        logger.info("token received");
+                        return (ResponseEntity<?>) pjp.proceed();
+                    }
+                }
+            } else {
+                logger.warn("no token received from request");
             }
+        } catch (Exception throwable) {
+            logger.warn("throwing from token validation");
+            throwable.printStackTrace();
         }
+
         // prevent methods from executing
-        logger.warn("no token received from request");
         // return 401 to the client
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
