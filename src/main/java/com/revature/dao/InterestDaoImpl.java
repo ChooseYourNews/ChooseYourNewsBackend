@@ -19,17 +19,17 @@ public class InterestDaoImpl implements InterestDao {
 
     private static SessionFactory sf = getSessionFactory();
 
-    @Override
-    public Interest addInterest(String interest, int userId) {
+            @Override
+            public Interest addInterest(String interest, int userId) {
 
-        try(Session sess = sf.openSession()) {
-            User user = sess.get(User.class, userId);
-            Transaction tx = sess.beginTransaction();
-            int interestId = (int)sess.save(new Interest(interest));
-            System.out.println("Inserted Interest: " + new Interest(interestId, interest));
-            sess.saveOrUpdate(new UserInterest(user, new Interest(interestId, interest)));
-            System.out.println("Inserted UserInterest: " + new UserInterest(user, new Interest(interestId, interest)));
-            tx.commit();
+                try(Session sess = sf.openSession()) {
+                    User user = sess.get(User.class, userId);
+                    Transaction tx = sess.beginTransaction();
+                    int interestId = (int)sess.save(new Interest(interest));
+                    System.out.println("Inserted Interest: " + new Interest(interestId, interest));
+                    sess.saveOrUpdate(new UserInterest(user, new Interest(interestId, interest)));
+                    System.out.println("Inserted UserInterest: " + new UserInterest(user, new Interest(interestId, interest)));
+                    tx.commit();
             sess.close();
             return new Interest(interestId, interest);
         }

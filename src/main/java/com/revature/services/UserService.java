@@ -1,7 +1,6 @@
 package com.revature.services;
 
-import com.revature.models.Interest;
-import com.revature.models.Profile;
+import com.revature.models.*;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -17,4 +16,8 @@ public interface UserService {
     public String register(String email, CharSequence password, String firstName, String lastName) throws NoSuchAlgorithmException, InvalidKeyException;
     public int getUserId(String token) throws IOException;
     public List<Interest> getInterests(int userId);
+    public List<NewsInfo> getStories(int userId) throws IOException;
+    public List<UserOutletInfo> getOutlets(int userId);
+    public UserOutletInfo addOrUpdateOutlet(com.revature.models.UserOutletInfo userOutletInfo, int userId);
+    public UserOutletInfo deleteOutlet(UserOutletInfo userOutletInfo, int userId);
 }

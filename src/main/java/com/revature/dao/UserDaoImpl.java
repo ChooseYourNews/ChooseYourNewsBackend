@@ -15,8 +15,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.revature.util.HibernateUtil.getSessionFactory;
 
@@ -34,7 +37,7 @@ public class UserDaoImpl implements UserDao {
 //                .list();
 
 
-        String interestListHql = "SELECT a.interest FROM UserInterest AS a JOIN a.interest AS b WHERE a.user.id = :userId";
+        String interestListHql = "select a.interest from UserInterest as a join a.interest as b where a.user.id = :userId";
 
         Query interestListQuery = sess.createQuery(interestListHql);
 
@@ -50,6 +53,24 @@ public class UserDaoImpl implements UserDao {
 
         User user = (User)userQuery.getSingleResult();
 
+        String newsOutletListHql = "from UserOutlet as uo where uo.user.id = :userId";
+
+        Query newsOutletQuery = sess.createQuery(newsOutletListHql);
+
+        newsOutletQuery.setParameter("userId", userId);
+
+        List<UserOutlet> newsOutletList = (List<UserOutlet>)newsOutletQuery.list();
+
+        ArrayList<UserOutletInfo> newsOutletInfoList = new ArrayList<UserOutletInfo>();
+
+        Iterator newsOutletListIterator = newsOutletList.iterator();
+
+        while(newsOutletListIterator.hasNext()) {
+            UserOutlet newsOutlet = (UserOutlet) newsOutletListIterator.next();
+            newsOutletInfoList.add(new UserOutletInfo(new NewsOutletInfo(newsOutlet.newsOutlet.id, newsOutlet.newsOutlet.nameOfOrg), newsOutlet.wantToSee));
+        }
+
+
 //        CriteriaBuilder interestListCriteriaBuilder = sess.getCriteriaBuilder();
 //        CriteriaQuery<Interest> interestListCriteriaQuery = interestListCriteriaBuilder.createQuery(Interest.class);
 //
@@ -60,7 +81,7 @@ public class UserDaoImpl implements UserDao {
 //        Query<Interest> interestListQuery = sess.createQuery(interestListCriteriaQuery);
 //        List<Interest> interestList = interestListQuery.list();
 
-        return new Profile(new UserInfo(user.firstName, user.lastName), interestList);
+        return new Profile(new UserInfo(user.firstName, user.lastName), interestList, newsOutletInfoList);
     }
 }
 

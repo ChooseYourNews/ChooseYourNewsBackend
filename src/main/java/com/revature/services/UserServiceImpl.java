@@ -1,8 +1,7 @@
 package com.revature.services;
 
 import com.revature.dao.*;
-import com.revature.models.Interest;
-import com.revature.models.Profile;
+import com.revature.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +19,10 @@ public class UserServiceImpl implements UserService {
     public UserDao userDao = new UserDaoImpl();
     @Autowired
     public AuthorizationSessionDao authorizationSessionDao = new AuthorizationSessionDaoImpl();
+    @Autowired
+    public StoryDao storyDao = new StoryDaoImpl();
+    @Autowired
+    public NewsOutletDao newsOutletDao = new NewsOutletDaoImpl();
 
     @Override
     public Interest addInterest(Interest interest, int userId) {
@@ -48,4 +51,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Interest> getInterests(int userId) { return interestDao.getInterests(userId);}
+
+    @Override
+    public List<NewsInfo> getStories(int userId) throws IOException { return storyDao.getStories(userId);}
+
+    @Override
+    public List<UserOutletInfo> getOutlets(int userId) { return newsOutletDao.getOutlets(userId);}
+
+    @Override
+    public UserOutletInfo addOrUpdateOutlet(UserOutletInfo userOutletInfo, int userId) { return newsOutletDao.addOrUpdateOutlet(userOutletInfo, userId);}
+
+    @Override
+    public UserOutletInfo deleteOutlet(UserOutletInfo userOutletInfo, int userId) { return newsOutletDao.deleteOutlet(userOutletInfo, userId);}
 }

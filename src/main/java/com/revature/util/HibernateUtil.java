@@ -23,7 +23,7 @@ public class HibernateUtil {
             settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
             settings.put(Environment.SHOW_SQL, "true");
-            settings.put(Environment.HBM2DDL_AUTO, "validate");
+            settings.put(Environment.HBM2DDL_AUTO, "update");
             // create, update, create-drop, validate
 
             sessionFactory = new Configuration()
@@ -32,7 +32,9 @@ public class HibernateUtil {
                     .addAnnotatedClass(UserInterest.class)
                     .addAnnotatedClass(AuthorizationSession.class)
                     .addAnnotatedClass(User.class)
-//                    .addAnnotatedClass(Profile.class)
+                    .addAnnotatedClass(UserOutlet.class)
+                    .addAnnotatedClass(NewsOutlet.class)
+                    .addAnnotatedClass(Profile.class)
                     .buildSessionFactory();
         }
         return sessionFactory;

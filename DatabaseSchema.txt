@@ -22,3 +22,16 @@ create table AuthorizationSession (
     user_id int not null references users(id),
     secret bytea not null
 );
+
+create table NewsOutlet (
+    id serial primary key not null,
+    name_of_org text not null,
+    api_pattern text not null,
+    api_key text not null
+);
+
+create table UserOutlet (
+    want_to_see boolean not null,
+    user_id int not null references users(id),
+    outlet_id int not null references NewsOutlet(id)
+);
